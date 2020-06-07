@@ -71,7 +71,7 @@ export default {
       this.listLoading = true
       getList().then(response => {
         // console.log(response)
-        this.list = response.data.items.slice(-5)
+        this.list = response.data.items.slice(-6)
         this.listLoading = false
       })
     }
