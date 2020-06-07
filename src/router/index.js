@@ -38,6 +38,12 @@ export const constantRoutes = [
   },
 
   {
+    path: '/deployList',
+    component: () => import('@/views/deploy/index'),
+    hidden: true
+  },
+
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
