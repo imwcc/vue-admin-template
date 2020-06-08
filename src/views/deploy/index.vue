@@ -1,24 +1,18 @@
 <template>
-  <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
+  <div class="deploy_main">
+    <h2> Your Deployments</h2>
+    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column label="Deployment name">
         <template slot-scope="scope">
           <router-link to="/"> {{ scope.row.title }}</router-link>
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <!-- <el-table-column label="Author" width="110" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
@@ -32,7 +26,7 @@
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" prop="created_at" label="Display_time" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
@@ -44,37 +38,45 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+  import { getList } from '@/api/table'
 
-export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
+  export default {
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          published: 'success',
+          draft: 'gray',
+          deleted: 'danger'
+        }
+        return statusMap[status]
       }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      list: null,
-      listLoading: true
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        // console.log(response)
-        this.list = response.data.items.slice(-6)
-        this.listLoading = false
-      })
+    },
+    data() {
+      return {
+        list: null,
+        listLoading: true
+      }
+    },
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        this.listLoading = true
+        getList().then(response => {
+          // console.log(response)
+          this.list = response.data.items.slice(-6)
+          this.listLoading = false
+        })
+      }
     }
   }
-}
 </script>
+
+<style scoped>
+  .deploy_main {
+    padding-top: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+</style>
