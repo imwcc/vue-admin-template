@@ -45,9 +45,10 @@ const actions = {
 
   // user login with Google
   loginWithGoogle({ commit }, userInfo) {
-    const { username, password } = userInfo
+    console.log(userInfo)
+    // const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      loginWithGoogle({ username: username.trim(), password: password }).then(response => {
+      loginWithGoogle(userInfo).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)

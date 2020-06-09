@@ -10,7 +10,7 @@ export function login(data) {
 
 export function loginWithGoogle(data) {
   return request({
-    url: '/vue-admin-template/user/login',
+    url: '/test',
     method: 'post',
     data
   })

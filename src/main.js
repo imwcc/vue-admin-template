@@ -14,6 +14,7 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import VueGoogleApi from 'vue-google-api'
 
 /**
  * If you don't want to use mock-server
@@ -27,6 +28,14 @@ if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
+
+const config = {
+  apiKey: 'AIzaSyDjbJY4K_bdo89iFCFMq52vZVmWYU7CFn8',
+  clientId: '472089821824-q6nm065imv0716vevj3mpgp8pflidq9g.apps.googleusercontent.com',
+  scope: 'https://www.googleapis.com/auth/android_partner_over_the_air',
+  discoveryDocs: ['https://androidovertheair.googleapis.com/$discovery/rest?version=v1&labels=ENABLED_PARTNERS']
+}
+Vue.use(VueGoogleApi, config)
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
