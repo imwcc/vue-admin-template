@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column label="Deployment name">
         <template slot-scope="scope">
-          <router-link to="/"> {{ scope.row.title }}</router-link>
+          <router-link to="/"> {{ scope.row.name }}</router-link>
         </template>
       </el-table-column>
       <!-- <el-table-column label="Author" width="110" align="center">
@@ -30,7 +30,7 @@
       <el-table-column align="center" prop="created_at" label="Display_time" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import { getList } from '@/api/table'
+  import { getList, getDeploymentsList } from '@/api/table'
 
   export default {
     filters: {
@@ -61,11 +61,20 @@
       this.fetchData()
     },
     methods: {
+      // fetchData() {
+      //   this.listLoading = true
+      //   getList().then(response => {
+      //     console.log(response)
+      //     this.list = response.data.items.slice(-6)
+      //     this.listLoading = false
+      //   })
+      // }
       fetchData() {
         this.listLoading = true
-        getList().then(response => {
-          // console.log(response)
-          this.list = response.data.items.slice(-6)
+        getDeploymentsList().then(response => {
+          let data = JSON.parse(response);
+          console.log(data)
+          this.list = data.deployments
           this.listLoading = false
         })
       }

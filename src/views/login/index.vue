@@ -6,7 +6,7 @@
         <h3 class="title">Android GOTA</h3>
       </div>
 
-      <el-form-item prop="username">
+      <!-- <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -23,11 +23,17 @@
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
-      </el-form-item>
+      </el-form-item> -->
+      <br>
+      <br>
+      <br>
+      <br>
+      <!-- <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin">Login</el-button> -->
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin">Login</el-button>
-      <google-signin-btn label="Sign In" style="margin-left:280px;" customClass="my-button" @click="loginWithGoogle">
+        @click.native.prevent="loginWithGoogle">Google Sign in</el-button>
+      <!-- <google-signin-btn label="Sign In" style="margin-left:280px;" customClass="my-button" @click="loginWithGoogle"> -->
       </google-signin-btn>
       <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -39,6 +45,7 @@
 
 <script>
   import { validUsername } from "@/utils/validate";
+  import { Message } from 'element-ui'
 
   var apiKey = 'AIzaSyDjbJY4K_bdo89iFCFMq52vZVmWYU7CFn8';
 
@@ -135,38 +142,43 @@
       },
 
       loginWithGoogle() {
-        console.log("login with Google!!");
-        console.log(this.$gapi.getAuthObject())
-        
-        this.$gapi.getAuthObject().then(authObject => {
-            // if auth2, returns the google auth object, the library otherwise
-            console.log('auth object init successfully')
-            let tokenInfo = this.getToken(authObject.currentUser.get())
-
-
-            this.loading = true;
-            this.$store
-              .dispatch("user/loginWithGoogle", tokenInfo)
-              .then(() => {
-                this.$router.push({ path: "/deployList" });
-                this.loading = false;
-              })
-              .catch(() => {
-                this.loading = false;
-              });
-
-          }, () => {
-            console.log('auth object init fail')
-          })
+        this.$gapi.signIn()
+        this.$gapi.isSignedIn().then(signStatus => {
+          console.log('signStatus ' + signStatus)
+          if (signStatus === true) {
+            this.$gapi.getAuthObject().then(authObj => {
+              let googleAuthResponse = this.getToken(authObj.currentUser.get())
+              console.log(googleAuthResponse)
+              this.loading = true;
+              this.$store
+                .dispatch("user/loginWithGoogle", googleAuthResponse)
+                .then(() => {
+                  this.$router.push({ path: "/deployList" });
+                  this.loading = false;
+                })
+                .catch(() => {
+                  this.loading = false;
+                });
+            }
+            )
+            // init user information
+            this.$gapi.currentUser().then(user =>{
+              this.$store.dispatch("user/setInfo", user)
+              console.log(user)
+            })
+          } else {
+            Message.error("login faild")
+          }
+        })
       },
 
       getToken(currentUser) {
-        console.log("currentUser token info");
+        console.log("currentUser token info")
         console.log(currentUser.getAuthResponse(true))
         return currentUser.getAuthResponse(true)
       },
 
-      login(){
+      login() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true;

@@ -35,6 +35,7 @@ const config = {
   scope: 'https://www.googleapis.com/auth/android_partner_over_the_air',
   discoveryDocs: ['https://androidovertheair.googleapis.com/$discovery/rest?version=v1&labels=ENABLED_PARTNERS']
 }
+
 Vue.use(VueGoogleApi, config)
 
 // set ElementUI lang to EN

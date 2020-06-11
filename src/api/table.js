@@ -7,3 +7,11 @@ export function getList(params) {
     params
   })
 }
+
+export function getDeploymentsList(params) {
+  return request({
+    url: '/deployments',
+    method: 'get',
+    params
+  })
+}

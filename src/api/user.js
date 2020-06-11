@@ -10,7 +10,7 @@ export function login(data) {
 
 export function loginWithGoogle(data) {
   return request({
-    url: '/test',
+    url: '/oauth/token',
     method: 'post',
     data
   })

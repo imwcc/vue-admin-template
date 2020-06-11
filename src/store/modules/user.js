@@ -1,4 +1,4 @@
-import { login, logout, getInfo, loginWithGoogle } from '@/api/user'
+import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -9,6 +9,8 @@ const getDefaultState = () => {
     avatar: ''
   }
 }
+
+var headPic = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
 
 const state = getDefaultState()
 
@@ -44,39 +46,46 @@ const actions = {
   },
 
   // user login with Google
-  loginWithGoogle({ commit }, userInfo) {
-    console.log(userInfo)
-    // const { username, password } = userInfo
+  loginWithGoogle({ commit }, googleAuthResponse) {
+    return new Promise((_resolve, _reject) => {
+      commit('SET_TOKEN', googleAuthResponse.access_token)
+      setToken(googleAuthResponse.access_token)
+      _resolve(true)
+    }
+    )
+  },
+
+  setInfo({ commit }, user) {
     return new Promise((resolve, reject) => {
-      loginWithGoogle(userInfo).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      commit('SET_NAME', user.name)
+      commit('SET_AVATAR', headPic)
+      resolve('pass')
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      const data = getDefaultState()
+      // const { name, avatar } = data
+      resolve(data)
 
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
+      // getInfo(state.token).then(response => {
+      //   const { data } = response
 
-        const { name, avatar } = data
+      //   if (!data) {
+      //     reject('Verification failed, please Login again.')
+      //   }
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      //   const { name, avatar } = data
+
+      //   commit('SET_NAME', name)
+      //   commit('SET_AVATAR', avatar)
+      //   console.log("1111111"+ avatar)
+      //   resolve(data)
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
 
