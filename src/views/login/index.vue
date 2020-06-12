@@ -32,7 +32,7 @@
         @click.native.prevent="handleLogin">Login</el-button> -->
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="loginWithGoogle">Google Sign in</el-button>
+        @click.native.prevent="loginWithGoogle">Sign in with Google</el-button>
       <!-- <google-signin-btn label="Sign In" style="margin-left:280px;" customClass="my-button" @click="loginWithGoogle"> -->
       </google-signin-btn>
       <!-- <div class="tips">
@@ -162,7 +162,7 @@
             }
             )
             // init user information
-            this.$gapi.currentUser().then(user =>{
+            this.$gapi.currentUser().then(user => {
               this.$store.dispatch("user/setInfo", user)
               console.log(user)
             })
