@@ -46,25 +46,6 @@
 <script>
   import { validUsername } from "@/utils/validate";
   import { Message } from 'element-ui'
-
-  var apiKey = 'AIzaSyDjbJY4K_bdo89iFCFMq52vZVmWYU7CFn8';
-
-  // Enter the API Discovery Docs that describes the APIs you want to
-  // access. In this example, we are accessing the People API, so we load
-  // Discovery Doc found here: https://developers.google.com/people/api/rest/
-  var discoveryDocs = ["https://androidovertheair.googleapis.com/$discovery/rest?version=v1&labels=ENABLED_PARTNERS"];
-
-  // Enter a client ID for a web application from the Google API Console:
-  //   https://console.developers.google.com/apis/credentials?project=_
-  // In your API Console project, add a JavaScript origin that corresponds
-  //   to the domain where you will be running the script.
-  var clientId = '472089821824-q6nm065imv0716vevj3mpgp8pflidq9g.apps.googleusercontent.com';
-
-  // Enter one or more authorization scopes. Refer to the documentation for
-  // the API or https://developers.google.com/people/v1/how-tos/authorizing
-  // for details.
-  var scopes = 'https://www.googleapis.com/auth/android_partner_over_the_air';
-
   export default {
     name: "Login",
     data() {
@@ -118,7 +99,6 @@
         this.$nextTick(() => {
           this.$refs.password.focus();
         });
-        this.loginWithGoogle()
       },
       //ref 用来直接绑定 DOM
       handleLogin() {
