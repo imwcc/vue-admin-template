@@ -1,15 +1,33 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'gota_access_token'
+const AccessTokenKey = 'gota_access_token'
+const ExpiresInKey = 'gota_expires_in'
+const ExpiresAtKey = 'gota_expires_at'
 
-export function getToken() {
-  return Cookies.get(TokenKey)
+export function getAccessToken() {
+  return Cookies.get(AccessTokenKey)
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+export function getExpiresIn() {
+  return Cookies.get(ExpiresInKey)
+}
+
+export function getExpiresAt() {
+  return Cookies.get(ExpiresAtKey)
+}
+
+export function setAccessToken(token) {
+  return Cookies.set(AccessTokenKey, token)
+}
+
+export function setExpiresIn(time) {
+  return Cookies.set(ExpiresInKey, time)
+}
+
+export function setExpiresAt(time) {
+  return Cookies.set(ExpiresAtKey, time)
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return Cookies.remove(AccessTokenKey) && Cookies.remove(ExpiresInKey) && Cookies.remove(ExpiresAtKey)
 }

@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
-      label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">Android GOTA</h3>
       </div>
@@ -31,8 +37,12 @@
       <!-- <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin">Login</el-button> -->
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="loginWithGoogle">Sign in with Google</el-button>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="loginWithGoogle"
+      >Sign in with Google</el-button>
       <!-- <google-signin-btn label="Sign In" style="margin-left:280px;" customClass="my-button" @click="loginWithGoogle"> -->
       </google-signin-btn>
       <!-- <div class="tips">
@@ -44,161 +54,160 @@
 </template>
 
 <script>
-  import { validUsername } from "@/utils/validate";
-  import { Message } from 'element-ui'
+import { validUsername } from '@/utils/validate'
+import { Message } from 'element-ui'
 
-  var apiKey = 'AIzaSyDjbJY4K_bdo89iFCFMq52vZVmWYU7CFn8';
+var apiKey = 'AIzaSyDjbJY4K_bdo89iFCFMq52vZVmWYU7CFn8'
 
-  // Enter the API Discovery Docs that describes the APIs you want to
-  // access. In this example, we are accessing the People API, so we load
-  // Discovery Doc found here: https://developers.google.com/people/api/rest/
-  var discoveryDocs = ["https://androidovertheair.googleapis.com/$discovery/rest?version=v1&labels=ENABLED_PARTNERS"];
+// Enter the API Discovery Docs that describes the APIs you want to
+// access. In this example, we are accessing the People API, so we load
+// Discovery Doc found here: https://developers.google.com/people/api/rest/
+var discoveryDocs = ['https://androidovertheair.googleapis.com/$discovery/rest?version=v1&labels=ENABLED_PARTNERS']
 
-  // Enter a client ID for a web application from the Google API Console:
-  //   https://console.developers.google.com/apis/credentials?project=_
-  // In your API Console project, add a JavaScript origin that corresponds
-  //   to the domain where you will be running the script.
-  var clientId = '472089821824-q6nm065imv0716vevj3mpgp8pflidq9g.apps.googleusercontent.com';
+// Enter a client ID for a web application from the Google API Console:
+//   https://console.developers.google.com/apis/credentials?project=_
+// In your API Console project, add a JavaScript origin that corresponds
+//   to the domain where you will be running the script.
+var clientId = '472089821824-q6nm065imv0716vevj3mpgp8pflidq9g.apps.googleusercontent.com'
 
-  // Enter one or more authorization scopes. Refer to the documentation for
-  // the API or https://developers.google.com/people/v1/how-tos/authorizing
-  // for details.
-  var scopes = 'https://www.googleapis.com/auth/android_partner_over_the_air';
+// Enter one or more authorization scopes. Refer to the documentation for
+// the API or https://developers.google.com/people/v1/how-tos/authorizing
+// for details.
+var scopes = 'https://www.googleapis.com/auth/android_partner_over_the_air'
 
-  export default {
-    name: "Login",
-    data() {
-      const validateUsername = (rule, value, callback) => {
-        if (!validUsername(value)) {
-          callback(new Error("Please enter the correct user name"));
-        } else {
-          callback();
-        }
-      };
-      const validatePassword = (rule, value, callback) => {
-        if (value.length < 6) {
-          callback(new Error("The password can not be less than 6 digits"));
-        } else {
-          callback();
-        }
-      };
-      return {
-        loginForm: {
-          username: "",
-          password: ""
-        },
-        loginRules: {
-          username: [
-            { required: true, trigger: "blur", validator: validateUsername }
-          ],
-          password: [
-            { required: true, trigger: "blur", validator: validatePassword }
-          ]
-        },
-        loading: false,
-        passwordType: "password",
-        redirect: undefined
-      };
-    },
-    watch: {
-      $route: {
-        handler: function (route) {
-          this.redirect = route.query && route.query.redirect;
-        },
-        immediate: true
+export default {
+  name: 'Login',
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      if (!validUsername(value)) {
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
       }
+    }
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loginForm: {
+        username: '',
+        password: ''
+      },
+      loginRules: {
+        username: [
+          { required: true, trigger: 'blur', validator: validateUsername }
+        ],
+        password: [
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
+      },
+      loading: false,
+      passwordType: 'password',
+      redirect: undefined
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+      this.loginWithGoogle()
     },
-    methods: {
-      showPwd() {
-        if (this.passwordType === "password") {
-          this.passwordType = "";
-        } else {
-          this.passwordType = "password";
-        }
-        this.$nextTick(() => {
-          this.$refs.password.focus();
-        });
-        this.loginWithGoogle()
-      },
-      //ref 用来直接绑定 DOM
-      handleLogin() {
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            this.loading = true;
-            this.$store
-              .dispatch("user/login", this.loginForm)
-              .then(() => {
-                this.$router.push({ path: "/deployList" });
-                this.loading = false;
-              })
-              .catch(() => {
-                this.loading = false;
-              });
-          } else {
-            console.log("error submit!!");
-            return false;
-          }
-        });
-      },
-
-      loginWithGoogle() {
-        this.$gapi.signIn()
-        this.$gapi.isSignedIn().then(signStatus => {
-          console.log('signStatus ' + signStatus)
-          if (signStatus === true) {
-            this.$gapi.getAuthObject().then(authObj => {
-              let googleAuthResponse = this.getToken(authObj.currentUser.get())
-              console.log(googleAuthResponse)
-              this.loading = true;
-              this.$store
-                .dispatch("user/loginWithGoogle", googleAuthResponse)
-                .then(() => {
-                  this.$router.push({ path: "/deployList" });
-                  this.loading = false;
-                })
-                .catch(() => {
-                  this.loading = false;
-                });
-            }
-            )
-            // init user information
-            this.$gapi.currentUser().then(user => {
-              this.$store.dispatch("user/setInfo", user)
-              console.log(user)
+    // ref 用来直接绑定 DOM
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store
+            .dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: '/deployList' })
+              this.loading = false
             })
-          } else {
-            Message.error("login faild")
-          }
-        })
-      },
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
 
-      getToken(currentUser) {
-        console.log("currentUser token info")
-        console.log(currentUser.getAuthResponse(true))
-        return currentUser.getAuthResponse(true)
-      },
-
-      login() {
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            this.loading = true;
+    loginWithGoogle() {
+      this.$gapi.signIn()
+      this.$gapi.isSignedIn().then(signStatus => {
+        console.log('signStatus ' + signStatus)
+        if (signStatus === true) {
+          this.$gapi.getAuthObject().then(authObj => {
+            const googleAuthResponse = this.getToken(authObj.currentUser.get())
+            console.log(googleAuthResponse)
+            this.loading = true
             this.$store
-              .dispatch("user/loginWithGoogle", this.loginForm)
+              .dispatch('user/loginWithGoogle', googleAuthResponse)
               .then(() => {
-                this.$router.push({ path: "/deployList" });
-                this.loading = false;
+                this.$router.push({ path: '/deployList' })
+                this.loading = false
               })
               .catch(() => {
-                this.loading = false;
-              });
-          } else {
-            console.log("error submit!!");
-            return false;
+                this.loading = false
+              })
           }
-        });
-      },
+          )
+          // init user information
+          this.$gapi.currentUser().then(user => {
+            this.$store.dispatch('user/setInfo', user)
+            console.log(user)
+          })
+        } else {
+          Message.error('login faild')
+        }
+      })
     },
-  };
+
+    getToken(currentUser) {
+      console.log('currentUser token info')
+      return currentUser.getAuthResponse(true)
+    },
+
+    login() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store
+            .dispatch('user/loginWithGoogle', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: '/deployList' })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
+}
 
 </script>
 

@@ -50,6 +50,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/dashboard',
+    component: Layout,
+    children: [{
+      path: 'dashboard',
+      name: 'Dashboard',
+      hidden: true,
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: 'ASSIGNMENTS', icon: 'dashboard' }
+    }]
+  },
+
+  {
     path: '/',
     // component: Layout,
     redirect: '/deployList'

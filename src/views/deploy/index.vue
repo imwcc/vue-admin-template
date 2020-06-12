@@ -1,7 +1,7 @@
 <template>
   <div class="deploy_main">
     <h2> Your Deployments</h2>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
+    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row @row-click="click_test">
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column label="Deployment name">
         <template slot-scope="scope">
-          <router-link to="/"> {{ scope.row.name }}</router-link>
+          <router-link to="/dashboard"> {{ scope.row.name }}</router-link>
         </template>
       </el-table-column>
       <!-- <el-table-column label="Author" width="110" align="center">
@@ -38,48 +38,53 @@
 </template>
 
 <script>
-  import { getList, getDeploymentsList } from '@/api/table'
+import { getList, getDeploymentsList } from '@/api/table'
 
-  export default {
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger'
       }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    // fetchData() {
+    //   this.listLoading = true
+    //   getList().then(response => {
+    //     console.log(response)
+    //     this.list = response.data.items.slice(-6)
+    //     this.listLoading = false
+    //   })
+    // }
+    fetchData() {
+      this.listLoading = true
+      getDeploymentsList().then(response => {
+        const data = JSON.parse(response)
+        console.log(data)
+        this.list = data.deployments
+        this.listLoading = false
+      })
     },
-    data() {
-      return {
-        list: null,
-        listLoading: true
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      // fetchData() {
-      //   this.listLoading = true
-      //   getList().then(response => {
-      //     console.log(response)
-      //     this.list = response.data.items.slice(-6)
-      //     this.listLoading = false
-      //   })
-      // }
-      fetchData() {
-        this.listLoading = true
-        getDeploymentsList().then(response => {
-          let data = JSON.parse(response);
-          console.log(data)
-          this.list = data.deployments
-          this.listLoading = false
-        })
-      }
+
+    click_test(index,e,f) {
+      console.log(index,f)
+      // todo
     }
   }
+}
 </script>
 
 <style scoped>

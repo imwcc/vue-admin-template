@@ -1,10 +1,13 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setAccessToken, setExpiresIn, setExpiresAt, removeToken, getAccessToken, getExpiresAt, getExpiresIn } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    token: getAccessToken(),
+    access_token: getAccessToken(),
+    expires_at: getExpiresAt(),
+    expires_in: getExpiresIn(),
     name: '',
     avatar: ''
   }
@@ -18,9 +21,24 @@ const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
   },
+
   SET_TOKEN: (state, token) => {
     state.token = token
   },
+
+  SET_ACCESS_TOKEN: (state, token) => {
+    console.log('set......' + token)
+    state.access_token = token
+  },
+
+  SET_EXPIRES_AT: (state, time) => {
+    state.expires_at = time
+  },
+
+  SET_EXPIRES_IN: (state, time) => {
+    state.expires_in = time
+  },
+
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -37,7 +55,8 @@ const actions = {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        commit('SET_ACCESS_TOKEN', data.access_token)
+        setAccessToken(data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -49,10 +68,37 @@ const actions = {
   loginWithGoogle({ commit }, googleAuthResponse) {
     return new Promise((_resolve, _reject) => {
       commit('SET_TOKEN', googleAuthResponse.access_token)
-      setToken(googleAuthResponse.access_token)
+      commit('SET_ACCESS_TOKEN', googleAuthResponse.access_token)
+      commit('SET_EXPIRES_AT', googleAuthResponse.expires_at)
+      commit('SET_EXPIRES_IN', googleAuthResponse.expires_in)
+      setAccessToken(googleAuthResponse.access_token)
+      setExpiresAt(googleAuthResponse.expires_at)
+      setExpiresIn(googleAuthResponse.expires_in)
       _resolve(true)
     }
     )
+  },
+
+  setTokenInfo({ commit }, tokenInfo) {
+    return new Promise((resolve, reject) => {
+      console.log('user setTokenInfo start')
+      commit('SET_ACCESS_TOKEN', tokenInfo.aceess_token)
+      commit('SET_EXPIRES_AT', tokenInfo.expires_at)
+      commit('SET_EXPIRES_IN', tokenInfo.expires_in)
+      console.log('user setTokenInfo finish')
+      resolve(true)
+    })
+  },
+
+  setTokenInfoToCookies(tokenInfo) {
+    return new Promise((resolve, reject) => {
+      console.log('user setTokenInfoToCookies start')
+      setAccessToken(tokenInfo.aceess_token)
+      setExpiresAt(tokenInfo.expires_at)
+      setExpiresIn(tokenInfo.expires_in)
+      resolve(true)
+      console.log('user setTokenInfoToCookies finsih')
+    })
   },
 
   setInfo({ commit }, user) {
