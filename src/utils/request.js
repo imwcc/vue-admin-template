@@ -43,6 +43,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    console.log("get response")
     const res = response.data
     if (response.status === 200) {
       return res
