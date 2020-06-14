@@ -9,7 +9,6 @@
         default-expand-all />
     </el-table> -->
     <el-table :data="tableData1" style="width: 100%">
-
       <el-table-column type="expand">
         <template slot-scope="scope">
           <h3>1 device group</h3>
@@ -20,15 +19,7 @@
               {{city}}
             </el-checkbox>
           </el-checkbox-group>
-
         </template>
-
-
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-        </el-checkbox-group>
-
       </el-table-column>
 
       <el-table-column prop="date" label="Group" width="180">
@@ -38,7 +29,7 @@
       <el-table-column prop="address" label="Operation">
       </el-table-column>
 
-      <el-table-column v-if="seen">
+      <el-table-column v-show="seen">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">EDIT</el-button>
         </template>
@@ -49,83 +40,30 @@
 </template>
 
 <script>
-
   const cityOptions = ['上海', '北京', '广州', '深圳'];
-  export default {
 
-
-    data() {
-      return {
-        checkAll: false,
-        checkedCities: ['上海', '北京'],
-        cities: cityOptions,
-        isIndeterminate: true,
-        seen: true,
-
-        // tableData: [{
-        //   id: 1,
-        //   date: '2016-05-02',
-        //   name: '王小虎',
-        //   address: '上海市普陀区金沙江路 1518 弄'
-        // }, {
-        //   id: 2,
-        //   date: '2016-05-04',
-        //   name: '王小虎',
-        //   address: '上海市普陀区金沙江路 1517 弄'
-        // }, {
-        //   id: 3,
-        //   date: '2016-05-01',
-        //   name: '王小虎',
-        //   address: '上海市普陀区金沙江路 1519 弄',
-        //   children: [{
-        //     id: 31,
-        //     date: '2016-05-01',
-        //     name: '王小虎',
-        //     address: '上海市普陀区金沙江路 1519 弄'
-        //   }, {
-        //     id: 32,
-        //     date: '2016-05-01',
-        //     name: '王小虎',
-        //     address: '上海市普陀区金沙江路 1519 弄'
-        //   }]
-        // }, {
-        //   id: 4,
-        //   date: '2016-05-03',
-        //   name: '王小虎',
-        //   address: '上海市普陀区金沙江路 1516 弄'
-        // }],
-
-
-        tableData1: [{
+  const testData = [{
           id: 3,
           date: '2016-05-01',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1519 弄',
-          hasChildren: true,
-          children: [{
-            id: 6,
-            date: '2016-06-06',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄',
-          },
-          {
-            id: 7,
-            date: '2016-06-07',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄',
-          }
-          ]
+          // hasChildren: true,
+          // children: [{
+          //   id: 6,
+          //   date: '2016-06-06',
+          //   name: '王小虎',
+          //   address: '上海市普陀区金沙江路 1519 弄',
+          //   },
+          //   {
+          //   id: 7,
+          //   date: '2016-06-07',
+          //   name: '王小虎',
+          //   address: '上海市普陀区金沙江路 1519 弄',
+          //   }
+          // ]
+        }]
 
-        }],
-        // {
-        //   id: 4,
-        //   date: '2016-05-03',
-        //   name: '王小虎',
-        //   address: '上海市普陀区金沙江路 1516 弄'
-        // }],
-
-        filterText: '',
-        data2: [{
+  const testData2 = [{
           id: 1,
           label: 'Level one 1',
           children: [{
@@ -159,7 +97,19 @@
             id: 8,
             label: 'Level two 3-2'
           }]
-        }],
+        }]
+
+  export default {
+    data() {
+      return {
+        checkAll: false,
+        checkedCities: ['上海', '北京'],
+        cities: cityOptions,
+        isIndeterminate: true,
+        seen: true,
+        tableData1: testData,
+        data2: testData2,
+        filterText: '',
         defaultProps: {
           children: 'children',
           label: 'label'
@@ -206,6 +156,10 @@
               }
             ])
           }, 1000)
+      },
+
+      handleEdit(index, row) {
+        console.log(index,row)
       }
     }
   }

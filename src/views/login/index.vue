@@ -12,7 +12,7 @@
         <h3 class="title">Android GOTA</h3>
       </div>
 
-      <!-- <el-form-item prop="username">
+      <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -29,13 +29,13 @@
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
-      </el-form-item> -->
+      </el-form-item>
       <br>
       <br>
       <br>
       <br>
-      <!-- <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin">Login</el-button> -->
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin">Login</el-button>
 
       <el-button
         :loading="loading"
@@ -44,7 +44,6 @@
         @click.native.prevent="loginWithGoogle"
       >Sign in with Google</el-button>
       <!-- <google-signin-btn label="Sign In" style="margin-left:280px;" customClass="my-button" @click="loginWithGoogle"> -->
-      </google-signin-btn>
       <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
@@ -153,6 +152,7 @@ export default {
 
     loginWithGoogle() {
       this.$gapi.signIn()
+      thhis.$gapi.out
       this.$gapi.isSignedIn().then(signStatus => {
         console.log('signStatus ' + signStatus)
         if (signStatus === true) {
